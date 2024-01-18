@@ -6,25 +6,34 @@
       branches:
         - main
         - feature/*
-  env:
-    MONGO_URI: ${{ vars.MONGO_URI }}
-    MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
-    MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+  # env:
+  #   MONGO_URI: ${{ vars.MONGO_URI }}
+  #   MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+  #   MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
   jobs:
     unit-testing:
       name: Unit Testing
       runs-on: ubuntu-latest
+      environment: MONGO_URI
       steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
+          
         - name: Setup NodeJS Version
           uses: actions/setup-node@v3
           with:
             node-version: 20
+
         - name: Install Dependencies
           run: npm install
+
         - name: Unit Testing
+          env:
+            MONGO_URI: ${{ vars.MONGO_URI }}
+            MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+            MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           run: npm test
+
         - name: Archive Test Result
           if: always() 
           uses: actions/upload-artifact@v3
