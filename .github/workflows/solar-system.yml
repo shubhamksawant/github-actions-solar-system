@@ -77,6 +77,8 @@
 
     docker:
                 name: docker
+                permissions: 
+                 packages: write 
                 runs-on: ubuntu-latest
                 needs:
                   - code-coverage
